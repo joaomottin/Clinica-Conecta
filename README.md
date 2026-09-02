@@ -21,11 +21,54 @@
   &nbsp;•&nbsp;
   <a href="https://clinica-webmcp-campo-largo-demo.vercel.app/openapi.json"><strong>📘 Ver OpenAPI</strong></a>
   &nbsp;•&nbsp;
-  <a href="#teste-real-com-o-chatgpt"><strong>🤖 Testar no ChatGPT</strong></a>
+  <a href="https://chatgpt.com/codex?app-landing-page=true"><strong>🤖 Abrir o Codex para testar</strong></a>
 </p>
 
 > [!IMPORTANT]
 > Esta é uma demonstração técnica. A clínica, o profissional, os pacientes e os agendamentos são fictícios. Não informe sintomas, documentos, prontuário, telefone verdadeiro ou qualquer dado pessoal/clínico real.
+
+## ⚡ Teste a prova de conceito em dois minutos
+
+### 1. Abra o Codex
+
+<p align="center">
+  <a href="https://chatgpt.com/codex?app-landing-page=true">
+    <img src="https://img.shields.io/badge/ABRIR_NO_CODEX-TESTAR_AGENDAMENTO-0B6B58?style=for-the-badge&logo=openai&logoColor=white" alt="Abrir o Codex para testar o agendamento">
+  </a>
+</p>
+
+Se o aplicativo não abrir automaticamente, o link mostrará a página do Codex. Abra um novo chat no **Codex**, selecione **GPT-5.6 Sol** ou **GPT-5.6 Terra** e cole o prompt abaixo.
+
+### 2. Copie e envie este prompt
+
+~~~text
+Quero testar uma prova de conceito de agendamento por WebMCP usando somente dados fictícios.
+
+Abra esta página no navegador integrado:
+https://clinica-webmcp-campo-largo-demo.vercel.app/
+
+Depois:
+1. Verifique se a página disponibiliza Site Tools/WebMCP e liste os nomes exatos das ferramentas encontradas.
+2. Use obter_dados_clinica para confirmar que é a clínica fictícia de Campo Largo e que Clínica Geral está disponível.
+3. Use buscar_horarios com servico="clinica-geral", periodo="tarde", quantidade=3 e data_inicial igual a amanhã no fuso America/Sao_Paulo.
+4. Use o primeiro horário disponível apenas como candidato.
+5. Prepare o resumo para nome_paciente="Paciente Teste WebMCP" e whatsapp="(41) 90000-0000".
+6. Pare e espere que eu responda exatamente “Confirmo”. Não chame agendar_consulta antes dessa confirmação.
+7. Quando eu responder “Confirmo”, use o slot_token retornado anteriormente e chame agendar_consulta com confirmacao_explicita=true.
+8. Ao terminar, mostre o código e o resumo do agendamento.
+
+Não invente ferramentas, tokens, horários, endpoints ou resultados. Se Site Tools não estiver disponível nesta sessão, explique claramente e não tente simular o agendamento.
+~~~
+
+### 3. Confirme a operação
+
+Depois que o Codex apresentar o serviço, profissional, data, hora, nome e WhatsApp fictícios, responda apenas:
+
+~~~text
+Confirmo
+~~~
+
+O resultado esperado é um código de agendamento real do banco de demonstração e uma nova linha com origem <code>webmcp</code> no painel administrativo.
 
 ## A ideia
 
