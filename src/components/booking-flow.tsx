@@ -20,6 +20,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { fetchReadWithRetry } from "@/lib/fetch-read-with-retry";
 import { cn } from "@/lib/utils";
 
 type Slot = {
@@ -110,7 +111,7 @@ export function BookingFlow({ minDate, maxDate, defaultDate }: { minDate: string
         quantidade: "10",
         dias: "1",
       });
-      const response = await fetch(`/api/availability?${query}`);
+      const response = await fetchReadWithRetry(`/api/availability?${query}`, { cache: "no-store" });
       const payload = (await response.json()) as AvailabilityResponse;
 
       if (!response.ok) throw new Error(getErrorMessage(payload, "Não foi possível consultar a agenda."));

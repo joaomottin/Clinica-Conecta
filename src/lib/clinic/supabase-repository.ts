@@ -36,6 +36,18 @@ type DatabaseAppointmentRow = {
   replayed?: boolean;
 };
 
+const CATALOG_CACHE_MS = 60_000;
+
+class SupabaseRepositoryError extends Error {
+  constructor(
+    message: string,
+    public code?: string,
+  ) {
+    super(message);
+    this.name = "SupabaseRepositoryError";
+  }
+}
+
 function mapAppointment(row: DatabaseAppointmentRow): AppointmentRecord {
   return {
     id: row.id,
@@ -59,6 +71,9 @@ function mapAppointment(row: DatabaseAppointmentRow): AppointmentRecord {
 
 export class SupabaseClinicRepository implements ClinicRepository {
   private client: SupabaseClient;
+  private catalog: ClinicCatalog | null = null;
+  private catalogExpiresAt = 0;
+  private catalogRequest: Promise<ClinicCatalog> | null = null;
 
   constructor() {
     const url = process.env.SUPABASE_URL;
@@ -73,7 +88,7 @@ export class SupabaseClinicRepository implements ClinicRepository {
     });
   }
 
-  async getCatalog(): Promise<ClinicCatalog> {
+  private async loadCatalog(): Promise<ClinicCatalog> {
     const [clinicResult, servicesResult, professionalsResult, linksResult, availabilityResult] = await Promise.all([
       this.client.from("clinics").select("*").eq("active", true).single(),
       this.client.from("services").select("*").eq("active", true),
@@ -83,7 +98,12 @@ export class SupabaseClinicRepository implements ClinicRepository {
     ]);
 
     const error = clinicResult.error ?? servicesResult.error ?? professionalsResult.error ?? linksResult.error ?? availabilityResult.error;
-    if (error || !clinicResult.data) throw new Error(error?.message ?? "Clínica não encontrada.");
+    if (error || !clinicResult.data) {
+      throw new SupabaseRepositoryError(
+        error?.message ?? "Clínica não encontrada.",
+        error?.code ?? "CLINIC_NOT_FOUND",
+      );
+    }
 
     const clinic = clinicResult.data;
 
@@ -130,6 +150,26 @@ export class SupabaseClinicRepository implements ClinicRepository {
     };
   }
 
+  async getCatalog(): Promise<ClinicCatalog> {
+    if (this.catalog && this.catalogExpiresAt > Date.now()) {
+      return structuredClone(this.catalog);
+    }
+
+    if (!this.catalogRequest) {
+      this.catalogRequest = this.loadCatalog()
+        .then((catalog) => {
+          this.catalog = catalog;
+          this.catalogExpiresAt = Date.now() + CATALOG_CACHE_MS;
+          return catalog;
+        })
+        .finally(() => {
+          this.catalogRequest = null;
+        });
+    }
+
+    return structuredClone(await this.catalogRequest);
+  }
+
   async listAppointments(range?: { from: string; to: string }) {
     let query = this.client
       .from("appointments")
@@ -139,7 +179,7 @@ export class SupabaseClinicRepository implements ClinicRepository {
     if (range) query = query.gte("starts_at", range.from).lt("starts_at", range.to);
 
     const { data, error } = await query;
-    if (error) throw new Error(error.message);
+    if (error) throw new SupabaseRepositoryError(error.message, error.code);
 
     return (data as DatabaseAppointmentRow[]).map(mapAppointment);
   }
@@ -199,3 +239,5 @@ export class SupabaseClinicRepository implements ClinicRepository {
     return { storage: "supabase" as const, ok: !error };
   }
 }
+
+export const supabaseClinicRepository = new SupabaseClinicRepository();

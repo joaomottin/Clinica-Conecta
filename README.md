@@ -230,7 +230,7 @@ Use apenas dados fictícios.
 | <code>POST</code> | <code>/api/admin/appointments/:id/cancel</code> | cancelamento protegido |
 | <code>GET</code> | <code>/openapi.json</code> | documentação técnica |
 
-Respostas usam <code>400</code> para dados inválidos, <code>401</code> para acesso administrativo não autenticado, <code>409</code> para horário ocupado e <code>429</code> para excesso de tentativas.
+Respostas usam <code>400</code> para dados inválidos, <code>401</code> para acesso administrativo não autenticado, <code>409</code> para horário ocupado, <code>429</code> para excesso de tentativas e <code>503</code> quando uma leitura do banco continua indisponível após as novas tentativas automáticas.
 
 ## Banco de dados
 

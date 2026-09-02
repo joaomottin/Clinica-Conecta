@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 import { Bot, CheckCircle2, Globe2 } from "lucide-react";
 
+import { fetchReadWithRetry } from "@/lib/fetch-read-with-retry";
+
 type RegistrationState = "checking" | "ready" | "fallback" | "error";
 
 declare global {
@@ -12,7 +14,10 @@ declare global {
 }
 
 async function fetchJson(path: string, init?: RequestInit) {
-  const response = await fetch(path, init);
+  const method = (init?.method ?? "GET").toUpperCase();
+  const response = method === "GET"
+    ? await fetchReadWithRetry(path, { ...init, cache: "no-store" })
+    : await fetch(path, init);
   const payload = await response.json();
   if (!response.ok) {
     const message = payload?.error?.message;

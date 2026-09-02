@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 
+import { RepositoryUnavailableError } from "@/lib/clinic/repository";
 import { ClinicServiceError } from "@/lib/clinic/service";
 
 export function getClientIp(request: Request) {
@@ -24,6 +25,23 @@ export function apiError(error: unknown) {
     return NextResponse.json(
       { error: { code: error.code, message: error.message } },
       { status: error.status },
+    );
+  }
+
+  if (error instanceof RepositoryUnavailableError) {
+    console.error("[clinic] repository read unavailable", {
+      operation: error.operation,
+      ...error.diagnostics,
+    });
+
+    return NextResponse.json(
+      {
+        error: {
+          code: "SERVICE_UNAVAILABLE",
+          message: "A agenda está temporariamente indisponível. Tente novamente em instantes.",
+        },
+      },
+      { status: 503 },
     );
   }
 

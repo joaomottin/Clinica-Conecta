@@ -20,6 +20,7 @@ next-env.d.ts
 /playwright-report/
 /test-results/
 /output/
+/.playwright-cli/
 *.lcov
 
 # Environment variables and local secrets

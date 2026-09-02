@@ -15,7 +15,10 @@ export function GET() {
         get: {
           operationId: "obterDadosClinica",
           summary: "Obtém a clínica e seus serviços ativos",
-          responses: { "200": { description: "Catálogo da clínica fictícia", content: { "application/json": { schema: { $ref: "#/components/schemas/ClinicResponse" } } } } },
+          responses: {
+            "200": { description: "Catálogo da clínica fictícia", content: { "application/json": { schema: { $ref: "#/components/schemas/ClinicResponse" } } } },
+            "503": { $ref: "#/components/responses/ServiceUnavailable" },
+          },
         },
       },
       "/api/availability": {
@@ -32,6 +35,7 @@ export function GET() {
           responses: {
             "200": { description: "Horários disponíveis", content: { "application/json": { schema: { $ref: "#/components/schemas/AvailabilityResponse" } } } },
             "400": { $ref: "#/components/responses/BadRequest" },
+            "503": { $ref: "#/components/responses/ServiceUnavailable" },
           },
         },
       },
@@ -54,7 +58,11 @@ export function GET() {
           operationId: "listarAgendamentosAdmin",
           summary: "Lista agendamentos com sessão administrativa",
           security: [{ adminCookie: [] }],
-          responses: { "200": { description: "Lista administrativa" }, "401": { description: "Sessão necessária" } },
+          responses: {
+            "200": { description: "Lista administrativa" },
+            "401": { description: "Sessão necessária" },
+            "503": { $ref: "#/components/responses/ServiceUnavailable" },
+          },
         },
       },
       "/api/admin/appointments/{id}/cancel": {
@@ -71,6 +79,7 @@ export function GET() {
       securitySchemes: { adminCookie: { type: "apiKey", in: "cookie", name: "clinic_admin_session" } },
       responses: {
         BadRequest: { description: "Dados inválidos", content: { "application/json": { schema: { $ref: "#/components/schemas/ErrorResponse" } } } },
+        ServiceUnavailable: { description: "Leitura do banco temporariamente indisponível após novas tentativas", content: { "application/json": { schema: { $ref: "#/components/schemas/ErrorResponse" } } } },
       },
       schemas: {
         ErrorResponse: {
