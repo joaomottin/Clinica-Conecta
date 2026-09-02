@@ -1,0 +1,136 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: "Segoe UI Variable", "Segoe UI", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Cascadia Code", "SFMono-Regular", Consolas, monospace;
+  --font-heading: "Segoe UI Variable", "Segoe UI", ui-sans-serif, system-ui, sans-serif;
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) * 0.65);
+  --radius-md: calc(var(--radius) * 0.82);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.35);
+  --radius-2xl: calc(var(--radius) * 1.75);
+}
+
+:root {
+  --background: oklch(0.975 0.014 91);
+  --foreground: oklch(0.245 0.034 178);
+  --card: oklch(0.997 0.004 91);
+  --card-foreground: oklch(0.245 0.034 178);
+  --popover: oklch(0.997 0.004 91);
+  --popover-foreground: oklch(0.245 0.034 178);
+  --primary: oklch(0.435 0.088 174);
+  --primary-foreground: oklch(0.985 0.008 91);
+  --secondary: oklch(0.93 0.028 170);
+  --secondary-foreground: oklch(0.31 0.06 174);
+  --muted: oklch(0.946 0.014 86);
+  --muted-foreground: oklch(0.49 0.028 178);
+  --accent: oklch(0.91 0.049 78);
+  --accent-foreground: oklch(0.34 0.053 63);
+  --destructive: oklch(0.59 0.205 26);
+  --border: oklch(0.885 0.022 174);
+  --input: oklch(0.87 0.025 174);
+  --ring: oklch(0.57 0.096 174);
+  --radius: 0.9rem;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  html {
+    @apply bg-background font-sans;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: "Segoe UI Variable", "Segoe UI", ui-sans-serif, system-ui, sans-serif;
+  }
+
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+
+  ::selection {
+    background: color-mix(in oklab, var(--primary) 22%, transparent);
+  }
+}
+
+.ambient {
+  position: fixed;
+  z-index: 0;
+  border-radius: 999px;
+  filter: blur(2px);
+  pointer-events: none;
+}
+
+.ambient-one {
+  top: 5rem;
+  right: -9rem;
+  width: 28rem;
+  height: 28rem;
+  background: radial-gradient(circle, color-mix(in oklab, var(--secondary) 76%, transparent), transparent 70%);
+}
+
+.ambient-two {
+  bottom: -12rem;
+  left: -10rem;
+  width: 34rem;
+  height: 34rem;
+  background: radial-gradient(circle, color-mix(in oklab, var(--accent) 48%, transparent), transparent 72%);
+}
+
+.fact-card {
+  display: flex;
+  min-height: 3.25rem;
+  align-items: center;
+  gap: 0.65rem;
+  border: 1px solid color-mix(in oklab, var(--foreground) 8%, transparent);
+  border-radius: 1rem;
+  background: color-mix(in oklab, var(--card) 78%, transparent);
+  padding: 0.75rem 0.9rem;
+  color: color-mix(in oklab, var(--foreground) 80%, transparent);
+  font-size: 0.78rem;
+  font-weight: 550;
+  backdrop-filter: blur(12px);
+}
+
+.fact-card svg {
+  width: 1rem;
+  height: 1rem;
+  color: var(--primary);
+}
+
+.booking-card {
+  background: linear-gradient(155deg, color-mix(in oklab, var(--card) 97%, white), color-mix(in oklab, var(--secondary) 14%, var(--card)));
+}
+
+@media (max-width: 640px) {
+  .ambient-one {
+    width: 20rem;
+    height: 20rem;
+  }
+}
