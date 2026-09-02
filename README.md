@@ -37,9 +37,30 @@
   </a>
 </p>
 
-Se o aplicativo não abrir automaticamente, o link mostrará a página do Codex. Abra um novo chat no **Codex**, selecione **GPT-5.6 Sol** ou **GPT-5.6 Terra** e cole o prompt abaixo.
+Se o aplicativo não abrir automaticamente, o link mostrará a página do Codex. Abra um novo chat no **Codex**, selecione **GPT-5.6 Sol** ou **GPT-5.6 Terra** e envie o pedido abaixo.
 
-### 2. Copie e envie este prompt
+### 2. Peça a consulta como você pediria a uma recepcionista
+
+Copie e envie este pedido no Codex:
+
+~~~text
+Abra este link e marque para mim uma consulta de Clínica Geral amanhã à tarde, no primeiro horário disponível:
+https://clinica-webmcp-campo-largo-demo.vercel.app/
+
+Meu nome é “Paciente Teste WebMCP” e meu WhatsApp é “(41) 90000-0000”.
+
+Antes de concluir, mostre o resumo da consulta e espere eu confirmar. Use somente os horários e as opções oferecidos pelo próprio site. Não invente nenhuma informação. Se não conseguir acessar o agendamento do site, apenas me avise.
+~~~
+
+É só isso. O pedido foi escrito como uma pessoa falaria normalmente, sem precisar conhecer WebMCP, nomes de ferramentas ou detalhes da API.
+
+> [!TIP]
+> Quer experimentar outra data ou período? Altere o pedido à vontade, mas continue usando apenas nome e telefone fictícios.
+
+<details>
+<summary><strong>Quer controlar cada etapa do teste? Abra o prompt avançado</strong></summary>
+
+Este formato é útil para desenvolvedores que desejam conferir a descoberta das ferramentas, os parâmetros enviados e a etapa obrigatória de confirmação.
 
 ~~~text
 Quero testar uma prova de conceito de agendamento por WebMCP usando somente dados fictícios.
@@ -60,15 +81,17 @@ Depois:
 Não invente ferramentas, tokens, horários, endpoints ou resultados. Se Site Tools não estiver disponível nesta sessão, explique claramente e não tente simular o agendamento.
 ~~~
 
+</details>
+
 ### 3. Confirme a operação
 
-Depois que o Codex apresentar o serviço, profissional, data, hora, nome e WhatsApp fictícios, responda apenas:
+Depois que o Codex apresentar o serviço, profissional, data, hora, nome e WhatsApp fictícios, confira o resumo e responda apenas:
 
 ~~~text
 Confirmo
 ~~~
 
-O resultado esperado é um código de agendamento real do banco de demonstração e uma nova linha com origem <code>webmcp</code> no painel administrativo.
+O resultado esperado é um código gerado pelo banco de demonstração e uma nova linha com origem <code>webmcp</code> no painel administrativo.
 
 ## A ideia
 
